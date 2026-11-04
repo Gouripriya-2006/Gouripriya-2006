@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerAI | Find Your Direction</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        body {
+            background: #f5f1e9;
+        }
+
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 245px;
+            min-width: 245px;
+            background: #191916;
+            color: white;
+            padding: 35px 22px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar .brand {
+            color: #d7bd8b;
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            margin-bottom: 55px;
+        }
+
+        .sidebar p {
+            color: #89877f;
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin: 20px 0 12px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #d5d1c8;
+            text-decoration: none;
+            padding: 12px;
+            margin-bottom: 7px;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #37352e;
+            color: #e0c99e;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            color: #85847d;
+            font-size: 12px;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            padding: 35px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .topbar h2 {
+            font-size: 25px;
+        }
+
+        .topbar span {
+            color: #8f7040;
+            font-size: 13px;
+        }
+
+        .hero-banner {
+            min-height: 440px;
+            background:
+                linear-gradient(90deg, rgba(20,20,18,.88), rgba(20,20,18,.35)),
+                url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1600&q=85');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            padding: 55px;
+            color: white;
+            border-radius: 4px;
+        }
+
+        .hero-content {
+            max-width: 620px;
+        }
+
+        .hero-label {
+            color: #e0c99e;
+            letter-spacing: 3px;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        .hero-banner h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(38px, 5vw, 62px);
+            line-height: 1.15;
+            margin-bottom: 22px;
+        }
+
+        .hero-banner p {
+            color: #e3dfd5;
+            margin-bottom: 28px;
+            max-width: 490px;
+        }
+
+        .dashboard-section {
+            margin-top: 50px;
+        }
+
+        .dashboard-section h2 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-section .subtitle {
+            color: #85847d;
+            margin-bottom: 25px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 27px;
+            border: 1px solid #e9e4da;
+            border-radius: 4px;
+            transition: .3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,.08);
+        }
+
+        .feature-icon {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #85847d;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .feature-card a {
+            color: #8f7040;
+            font-weight: 700;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        .home-footer {
+            margin-top: 55px;
+            padding: 25px 0;
+            border-top: 1px solid #e2dccf;
+            color: #85847d;
+            font-size: 13px;
+        }
+
+        @media(max-width: 850px) {
+            .app-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-width: 0;
+                padding: 20px;
+            }
+
+            .sidebar .brand {
+                margin-bottom: 15px;
+            }
+
+            .sidebar p,
+            .sidebar-bottom {
+                display: none;
+            }
+
+            .sidebar a {
+                display: inline-block;
+                margin: 3px;
+                padding: 9px;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .hero-banner {
+                padding: 35px 25px;
+                min-height: 380px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">CareerAI.</div>
+
+        <p>MAIN MENU</p>
+
+        <a href="{{ url_for('home') }}" class="active">⌂ &nbsp; Overview</a>
+
+        <a href="{{ url_for('assessment') }}">◎ &nbsp; Career Assessment</a>
+
+        <a href="{{ url_for('dashboard') }}">▦ &nbsp; Dashboard</a>
+
+        <p>CAREER TOOLS</p>
+
+        <a href="{{ url_for('assessment') }}">✧ &nbsp; Career Guidance</a>
+
+        <a href="{{ url_for('assessment') }}">◇ &nbsp; Skill Analysis</a>
+
+        <a href="{{ url_for('assessment') }}">⌁ &nbsp; Career Roadmap</a>
+
+        <div class="sidebar-bottom">
+            <hr style="border-color:#39372f; margin-bottom:18px;">
+            Your future starts here.
+            <br><br>
+            © 2026 CareerAI
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+
+        <div class="topbar">
+            <h2>Overview</h2>
+            <span>YOUR PERSONAL CAREER SPACE</span>
+        </div>
+
+        <section class="hero-banner">
+
+            <div class="hero-content">
+
+                <div class="hero-label">
+                    YOUR CAREER JOURNEY BEGINS HERE
+                </div>
+
+                <h1>The map your career has been waiting for.</h1>
+
+                <p>
+                    Discover opportunities that match your education,
+                    interests and strengths. Build your skills and
+                    move confidently towards your future.
+                </p>
+
+                <a href="{{ url_for('assessment') }}" class="btn btn-light">
+                    Find Your Career Path →
+                </a>
+
+            </div>
+
+        </section>
+
+        <section class="dashboard-section">
+
+            <h2>Explore Your Career Tools</h2>
+
+            <p class="subtitle">
+                Everything you need to plan your professional journey.
+            </p>
+
+            <div class="grid">
+
+                <div class="feature-card">
+                    <div class="feature-icon">✦</div>
+                    <h3>Career Assessment</h3>
+                    <p>Discover opportunities based on your education and interests.</p>
+                    <a href="{{ url_for('assessment') }}">Start Assessment →</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">◎</div>
+                    <h3>Career Recommendations</h3>
+                    <p>Explore career paths that match your profile.</p>
+                    <a href="{{ url_for('assessment') }}">Explore Careers →</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">◇</div>
+                    <h3>Skill Gap Analysis</h3>
+                    <p>Identify the skills you need to develop.</p>
+                    <a href="{{ url_for('assessment') }}">Check Skills →</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⌁</div>
+                    <h3>Career Roadmap</h3>
+                    <p>Follow a structured learning journey.</p>
+                    <a href="{{ url_for('assessment') }}">View Roadmap →</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">▤</div>
+                    <h3>Course Recommendations</h3>
+                    <p>Find learning resources for your career goals.</p>
+                    <a href="{{ url_for('assessment') }}">Explore Courses →</a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">▦</div>
+                    <h3>Student Dashboard</h3>
+                    <p>View previously submitted assessment records.</p>
+                    <a href="{{ url_for('dashboard') }}">Open Dashboard →</a>
+                </div>
+
+            </div>
+
+        </section>
+
+        <footer class="home-footer">
+            CareerAI — Discover your potential. Design your future.
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

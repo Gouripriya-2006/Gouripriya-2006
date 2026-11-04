@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Gap Analysis | CareerAI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 245px;
+            min-width: 245px;
+            background: #191916;
+            padding: 35px 22px;
+            color: white;
+        }
+
+        .brand {
+            color: #e0c99e;
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            margin-bottom: 55px;
+        }
+
+        .sidebar p {
+            color: #89877f;
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin: 20px 0 12px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #d5d1c8;
+            padding: 12px;
+            margin-bottom: 7px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #37352e;
+            color: #e0c99e;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            padding: 40px;
+        }
+
+        .heading {
+            margin-bottom: 30px;
+        }
+
+        .heading span {
+            color: #987b4c;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        .heading h1 {
+            font-size: 40px;
+            margin: 10px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border: 1px solid #e9e4da;
+        }
+
+        .stat-card h3 {
+            color: #987b4c;
+            font-size: 15px;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            margin-top: 10px;
+        }
+
+        .skill-panel {
+            background: white;
+            padding: 30px;
+            border: 1px solid #e9e4da;
+        }
+
+        .skill-panel h2 {
+            font-size: 25px;
+            margin-bottom: 20px;
+        }
+
+        .skill-item {
+            padding: 13px;
+            margin-bottom: 10px;
+            background: #f7f5ef;
+            border-left: 3px solid #b59a69;
+        }
+
+        .missing-item {
+            border-left-color: #8f6658;
+        }
+
+        .tip-box {
+            background: #24231e;
+            color: white;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .tip-box h3 {
+            color: #e0c99e;
+            margin-bottom: 10px;
+        }
+
+        @media(max-width: 800px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-width: 0;
+                padding: 20px;
+            }
+
+            .brand {
+                margin-bottom: 15px;
+            }
+
+            .sidebar p {
+                display: none;
+            }
+
+            .sidebar a {
+                display: inline-block;
+                margin: 3px;
+            }
+
+            .main-content {
+                padding: 22px;
+            }
+
+            .heading h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="brand">CareerAI.</div>
+
+        <p>MAIN MENU</p>
+        <a href="{{ url_for('home') }}">⌂ &nbsp; Overview</a>
+        <a href="{{ url_for('assessment') }}">◎ &nbsp; Assessment</a>
+        <a href="{{ url_for('dashboard') }}">▦ &nbsp; Dashboard</a>
+
+        <p>CAREER TOOLS</p>
+        <a href="{{ url_for('skill_gap', career=result.career) }}" class="active">
+            ◇ &nbsp; Skill Analysis
+        </a>
+        <a href="{{ url_for('roadmap', career=result.career) }}">⌁ &nbsp; Roadmap</a>
+        <a href="{{ url_for('courses', career=result.career)">▤ &nbsp; Courses</a>
+    </aside>
+
+    <main class="main-content">
+
+        <div class="heading">
+            <span>UNDERSTAND YOUR STRENGTHS</span>
+            <h1>Skill Gap Analysis</h1>
+            <p>Identify your existing skills and discover areas to improve.</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ result.career }}</h2>
+            <p>Selected Career Path</p>
+        </div>
+
+        <div class="grid">
+
+            <div class="stat-card">
+                <h3>TOTAL REQUIRED SKILLS</h3>
+                <div class="stat-number">{{ result.total_required }}</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>AVAILABLE SKILLS</h3>
+                <div class="stat-number">{{ result.available_skills | length }}</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>SKILLS TO DEVELOP</h3>
+                <div class="stat-number">{{ result.missing_skills | length }}</div>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <section class="skill-panel">
+                <h2>✓ Your Existing Skills</h2>
+
+                {% if result.available_skills %}
+                    {% for skill in result.available_skills %}
+                        <div class="skill-item">
+                            {{ skill }}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No matching skills identified yet.</p>
+                {% endif %}
+            </section>
+
+            <section class="skill-panel">
+                <h2>↗ Skills to Develop</h2>
+
+                {% if result.missing_skills %}
+                    {% for skill in result.missing_skills %}
+                        <div class="skill-item missing-item">
+                            {{ skill }}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>All mapped skills are covered!</p>
+                {% endif %}
+            </section>
+
+        </div>
+
+        <section class="tip-box">
+            <h3>Your Next Step</h3>
+            <p>
+                Focus on developing the missing skills through practical
+                projects, structured learning and consistent practice.
+            </p>
+        </section>
+
+        <div style="margin-top:30px;">
+            <a href="{{ url_for('roadmap', career=result.career) }}" class="btn">
+                View Career Roadmap →
+            </a>
+
+            <a href="{{ url_for('courses', career=result.career) }}" class="btn">
+                Explore Courses
+            </a>
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommended Courses | CareerAI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 245px;
+            min-width: 245px;
+            background: #191916;
+            padding: 35px 22px;
+            color: white;
+        }
+
+        .brand {
+            color: #e0c99e;
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            margin-bottom: 55px;
+        }
+
+        .sidebar p {
+            color: #89877f;
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin: 20px 0 12px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #d5d1c8;
+            padding: 12px;
+            margin-bottom: 7px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #37352e;
+            color: #e0c99e;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            padding: 40px;
+        }
+
+        .heading {
+            margin-bottom: 35px;
+        }
+
+        .heading span {
+            color: #987b4c;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        .heading h1 {
+            font-size: 42px;
+            margin: 12px 0;
+        }
+
+        .career-banner {
+            background: #24231e;
+            color: white;
+            padding: 30px;
+            margin-bottom: 35px;
+        }
+
+        .career-banner h2 {
+            color: #e0c99e;
+            font-size: 28px;
+        }
+
+        .course-card {
+            background: white;
+            padding: 28px;
+            border: 1px solid #e9e4da;
+            box-shadow: 0 8px 25px rgba(0,0,0,.04);
+            transition: .3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,.08);
+        }
+
+        .course-number {
+            color: #987b4c;
+            font-size: 12px;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .course-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .course-icon {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .learning-tip {
+            background: #24231e;
+            color: white;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .learning-tip h3 {
+            color: #e0c99e;
+            margin-bottom: 12px;
+        }
+
+        @media(max-width: 800px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-width: 0;
+                padding: 20px;
+            }
+
+            .brand {
+                margin-bottom: 15px;
+            }
+
+            .sidebar p {
+                display: none;
+            }
+
+            .sidebar a {
+                display: inline-block;
+                margin: 3px;
+            }
+
+            .main-content {
+                padding: 22px;
+            }
+
+            .heading h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">CareerAI.</div>
+
+        <p>MAIN MENU</p>
+        <a href="{{ url_for('home') }}">⌂ &nbsp; Overview</a>
+        <a href="{{ url_for('assessment') }}">◎ &nbsp; Assessment</a>
+        <a href="{{ url_for('dashboard') }}">▦ &nbsp; Dashboard</a>
+
+        <p>CAREER TOOLS</p>
+        <a href="{{ url_for('assessment') }}">✧ &nbsp; Career Guidance</a>
+        <a href="{{ url_for('skill_gap', career=career) }}">◇ &nbsp; Skill Analysis</a>
+        <a href="{{ url_for('roadmap', career=career) }}">⌁ &nbsp; Roadmap</a>
+        <a href="{{ url_for('courses', career=career) }}" class="active">▤ &nbsp; Courses</a>
+
+    </aside>
+
+    <main class="main-content">
+
+        <div class="heading">
+            <span>INVEST IN YOUR KNOWLEDGE</span>
+            <h1>Recommended Courses</h1>
+            <p>Explore learning opportunities to strengthen your career skills.</p>
+        </div>
+
+        <section class="career-banner">
+            <p style="color:#c5b99e; margin-bottom:8px;">COURSES FOR YOUR CAREER PATH</p>
+            <h2>{{ career }}</h2>
+        </section>
+
+        <h2 style="font-size:29px;">Your Learning Resources</h2>
+
+        <p style="color:#85847d; margin-top:8px;">
+            Explore these recommended learning options.
+        </p>
+
+        {% if courses %}
+
+        <div class="grid">
+
+            {% for course in courses %}
+
+            <div class="course-card">
+
+                <div class="course-icon">📖</div>
+
+                <div class="course-number">
+                    LEARNING RESOURCE {{ loop.index }}
+                </div>
+
+                <h3>
+                    {% if course is mapping %}
+                        {{ course.get('name', course.get('course', 'Recommended Course')) }}
+                    {% else %}
+                        {{ course }}
+                    {% endif %}
+                </h3>
+
+                {% if course is mapping %}
+                    {% for key, value in course.items() %}
+                        {% if key not in ['name', 'course'] %}
+                            <p>
+                                <strong>{{ key | replace('_', ' ') | title }}:</strong>
+                                {{ value }}
+                            </p>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <p>Explore this learning resource to improve your knowledge and skills.</p>
+                {% endif %}
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="card">
+            <h3>No Courses Available</h3>
+            <p>Recommendations for this career are not available yet.</p>
+        </div>
+
+        {% endif %}
+
+        <section class="learning-tip">
+            <h3>Your Learning Strategy</h3>
+            <p>
+                Learn consistently, practise through projects and build
+                practical experience. Every new skill takes you one step
+                closer to your career goal.
+            </p>
+        </section>
+
+        <div style="margin-top:30px;">
+            <a href="{{ url_for('roadmap', career=career) }}" class="btn">
+                View Career Roadmap →
+            </a>
+
+            <a href="{{ url_for('assessment') }}" class="btn">
+                New Assessment
+            </a>
+        </div>
+
+        <footer>
+            CareerAI — Discover your potential. Design your future.
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

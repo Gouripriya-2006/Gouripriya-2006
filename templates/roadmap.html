@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Roadmap | CareerAI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 245px;
+            min-width: 245px;
+            background: #191916;
+            padding: 35px 22px;
+            color: white;
+        }
+
+        .brand {
+            color: #e0c99e;
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            margin-bottom: 55px;
+        }
+
+        .sidebar p {
+            color: #89877f;
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin: 20px 0 12px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #d5d1c8;
+            padding: 12px;
+            margin-bottom: 7px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #37352e;
+            color: #e0c99e;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            padding: 40px;
+        }
+
+        .heading {
+            margin-bottom: 35px;
+        }
+
+        .heading span {
+            color: #987b4c;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        .heading h1 {
+            font-size: 42px;
+            margin: 12px 0;
+        }
+
+        .career-banner {
+            background: #24231e;
+            color: white;
+            padding: 32px;
+            margin-bottom: 40px;
+        }
+
+        .career-banner h2 {
+            color: #e0c99e;
+            font-size: 28px;
+        }
+
+        .roadmap-list {
+            position: relative;
+            margin-top: 30px;
+        }
+
+        .roadmap-item {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 25px;
+            align-items: stretch;
+        }
+
+        .stage-number {
+            width: 55px;
+            min-width: 55px;
+            height: 55px;
+            background: #24231e;
+            color: #e0c99e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            border-radius: 50%;
+        }
+
+        .stage-card {
+            background: white;
+            border: 1px solid #e9e4da;
+            padding: 27px;
+            flex: 1;
+            box-shadow: 0 8px 25px rgba(0,0,0,.04);
+        }
+
+        .stage-card h3 {
+            color: #987b4c;
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+
+        .stage-card p {
+            color: #69685f;
+        }
+
+        .tip-box {
+            background: #24231e;
+            color: white;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .tip-box h3 {
+            color: #e0c99e;
+            margin-bottom: 10px;
+        }
+
+        @media(max-width: 800px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-width: 0;
+                padding: 20px;
+            }
+
+            .brand {
+                margin-bottom: 15px;
+            }
+
+            .sidebar p {
+                display: none;
+            }
+
+            .sidebar a {
+                display: inline-block;
+                margin: 3px;
+            }
+
+            .main-content {
+                padding: 22px;
+            }
+
+            .heading h1 {
+                font-size: 32px;
+            }
+
+            .roadmap-item {
+                gap: 12px;
+            }
+
+            .stage-number {
+                width: 40px;
+                min-width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+
+        <div class="brand">CareerAI.</div>
+
+        <p>MAIN MENU</p>
+        <a href="{{ url_for('home') }}">⌂ &nbsp; Overview</a>
+        <a href="{{ url_for('assessment') }}">◎ &nbsp; Assessment</a>
+        <a href="{{ url_for('dashboard') }}">▦ &nbsp; Dashboard</a>
+
+        <p>CAREER TOOLS</p>
+        <a href="{{ url_for('assessment') }}">✧ &nbsp; Career Guidance</a>
+        <a href="{{ url_for('skill_gap', career=career) }}">◇ &nbsp; Skill Analysis</a>
+        <a href="{{ url_for('roadmap', career=career) }}" class="active">⌁ &nbsp; Roadmap</a>
+        <a href="{{ url_for('courses', career=career) }}">▤ &nbsp; Courses</a>
+
+    </aside>
+
+    <main class="main-content">
+
+        <div class="heading">
+            <span>PLAN YOUR PROFESSIONAL JOURNEY</span>
+            <h1>Your Career Roadmap</h1>
+            <p>A structured learning journey to help you move towards your career goal.</p>
+        </div>
+
+        <section class="career-banner">
+            <p style="color:#c5b99e; margin-bottom:8px;">YOUR SELECTED CAREER</p>
+            <h2>{{ career }}</h2>
+        </section>
+
+        <h2 style="font-size:29px;">Your Learning Journey</h2>
+
+        <p style="color:#85847d; margin-top:8px;">
+            Follow these stages and build your professional skills step by step.
+        </p>
+
+        <div class="roadmap-list">
+
+            {% for stage in roadmap %}
+
+            <div class="roadmap-item">
+
+                <div class="stage-number">
+                    {{ loop.index }}
+                </div>
+
+                <div class="stage-card">
+
+                    <h3>Stage {{ loop.index }}</h3>
+
+                    {% if stage is mapping %}
+
+                        {% for key, value in stage.items() %}
+
+                            <p>
+                                <strong>{{ key | replace('_', ' ') | title }}:</strong>
+                                {{ value }}
+                            </p>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <p>{{ stage }}</p>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <section class="tip-box">
+            <h3>Remember Your Goal</h3>
+            <p>
+                Consistency is more important than speed.
+                Keep learning, practise your skills and gain practical experience
+                throughout your career journey.
+            </p>
+        </section>
+
+        <div style="margin-top:30px;">
+
+            <a href="{{ url_for('courses', career=career) }}" class="btn">
+                Explore Recommended Courses →
+            </a>
+
+            <a href="{{ url_for('assessment') }}" class="btn">
+                New Assessment
+            </a>
+
+        </div>
+
+        <footer>
+            CareerAI — Discover your potential. Design your future.
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

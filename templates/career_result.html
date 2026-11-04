@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Results | CareerAI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 245px;
+            min-width: 245px;
+            background: #191916;
+            padding: 35px 22px;
+            color: white;
+        }
+
+        .brand {
+            color: #e0c99e;
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            margin-bottom: 55px;
+        }
+
+        .sidebar p {
+            color: #89877f;
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin: 20px 0 12px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #d5d1c8;
+            padding: 12px;
+            margin-bottom: 7px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #37352e;
+            color: #e0c99e;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            padding: 40px;
+        }
+
+        .heading {
+            margin-bottom: 30px;
+        }
+
+        .heading span {
+            color: #987b4c;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        .heading h1 {
+            font-size: 40px;
+            margin: 10px 0;
+        }
+
+        .summary-card {
+            background: #24231e;
+            color: white;
+            padding: 30px;
+            margin-bottom: 35px;
+        }
+
+        .summary-card h3 {
+            color: #e0c99e;
+            margin-bottom: 15px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .summary-grid strong {
+            color: #d6bd8d;
+            display: block;
+        }
+
+        .career-card {
+            background: white;
+            padding: 28px;
+            border: 1px solid #e9e4da;
+            border-radius: 4px;
+            box-shadow: 0 8px 25px rgba(0,0,0,.04);
+        }
+
+        .career-card h3 {
+            font-size: 23px;
+            margin-bottom: 15px;
+        }
+
+        .rank {
+            color: #987b4c;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        .score {
+            font-size: 28px;
+            font-family: 'Playfair Display', serif;
+            color: #987b4c;
+        }
+
+        .match-bar {
+            height: 8px;
+            background: #eeeae2;
+            border-radius: 10px;
+            margin: 12px 0 20px;
+            overflow: hidden;
+        }
+
+        .match-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #a48654, #dfc493);
+        }
+
+        .career-card .btn {
+            width: 100%;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .note {
+            color: #85847d;
+            font-size: 13px;
+            margin-top: 25px;
+        }
+
+        @media(max-width: 800px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-width: 0;
+                padding: 20px;
+            }
+
+            .brand {
+                margin-bottom: 15px;
+            }
+
+            .sidebar p {
+                display: none;
+            }
+
+            .sidebar a {
+                display: inline-block;
+                margin: 3px;
+            }
+
+            .main-content {
+                padding: 22px;
+            }
+
+            .heading h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="brand">CareerAI.</div>
+
+        <p>MAIN MENU</p>
+        <a href="{{ url_for('home') }}">⌂ &nbsp; Overview</a>
+        <a href="{{ url_for('assessment') }}">◎ &nbsp; Assessment</a>
+        <a href="{{ url_for('dashboard') }}">▦ &nbsp; Dashboard</a>
+
+        <p>CAREER TOOLS</p>
+        <a href="{{ url_for('assessment') }}">✧ &nbsp; Career Guidance</a>
+        <a href="{{ url_for('assessment') }}">◇ &nbsp; Skill Analysis</a>
+    </aside>
+
+    <main class="main-content">
+
+        <div class="heading">
+            <span>YOUR PERSONAL CAREER REPORT</span>
+            <h1>Your Career Recommendations</h1>
+            <p>Explore opportunities that match your profile.</p>
+        </div>
+
+        <section class="summary-card">
+            <h3>Assessment Summary</h3>
+
+            <div class="summary-grid">
+                <div>
+                    <strong>Student Name</strong>
+                    {{ name }}
+                </div>
+
+                <div>
+                    <strong>Education</strong>
+                    {{ education }}
+                </div>
+
+                <div>
+                    <strong>Academic Score</strong>
+                    {{ percentage }}%
+                </div>
+
+                <div>
+                    <strong>Selected Skills</strong>
+                    {{ skills | length }}
+                </div>
+            </div>
+        </section>
+
+        <h2 style="margin-bottom:10px;">Recommended Career Paths</h2>
+        <p style="color:#85847d;">
+            Your top career matches based on the assessment.
+        </p>
+
+        {% if recommendations %}
+
+        <div class="grid">
+
+            {% for item in recommendations %}
+
+            <div class="career-card">
+
+                <div class="rank">CAREER MATCH #{{ loop.index }}</div>
+
+                <h3>{{ item.career }}</h3>
+
+                <div class="score">{{ item.score }}%</div>
+                <small>Rule-based match score</small>
+
+                <div class="match-bar">
+                    <div class="match-fill"
+                         style="width: {{ item.score }}%;">
+                    </div>
+                </div>
+
+                <strong>Matching Skills</strong>
+
+                {% if item.matching_skills %}
+                    <p>{{ item.matching_skills | join(', ') }}</p>
+                {% else %}
+                    <p>No direct matching skills found.</p>
+                {% endif %}
+
+                <a class="btn"
+                   href="{{ url_for('skill_gap', career=item.career, skills=skills) }}">
+                    Skill Gap Analysis
+                </a>
+
+                <a class="btn"
+                   href="{{ url_for('roadmap', career=item.career) }}">
+                    Career Roadmap
+                </a>
+
+                <a class="btn"
+                   href="{{ url_for('courses', career=item.career) }}">
+                    Recommended Courses
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="card">
+            <h3>No Career Recommendations Found</h3>
+            <p>Try another combination of education, interests and skills.</p>
+        </div>
+
+        {% endif %}
+
+        <p class="note">
+            Note: Match scores are rule-based indicators, not probabilities
+            or guaranteed career outcomes.
+        </p>
+
+        <br>
+
+        <a href="{{ url_for('assessment') }}" class="btn">
+            Take Another Assessment
+        </a>
+
+    </main>
+</div>
+
+</body>
+</html>
